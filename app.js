@@ -47,46 +47,5 @@ connect()
 
 app.use(express.static('public'))
 
-io.on('connection', (socket) => {
-    console.log('User connected')
 
-    socket.on('joinRoom', (roomId) => {
-        socket.join(roomId)
-        console.log(`User joined room :${roomId}`)
-    })
-
-    socket.on('chatMessage', (data) => {
-        io.to(data.roomId).emit('message', data)
-    })
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected')
-    })
-})
-
-// SwaggerUI
-const swaggerUi = require('swagger-ui-express')
-const swaggerJsdoc = require('swagger-jsdoc')
-
-const options = {
-    definition: {
-    openapi: '3.0.0',
-    info: {
-        title: 'Group Chat App',
-        version: '1.0.0',
-        description: 'An API for a (riktam) group chat app ',
-    },
-    servers:[
-        {
-            api:'http://localhost:3500/'
-        }
-    ]
-    },
-    apis: ['./routes/*.js'], 
-};
-
-const specs = swaggerJsdoc(options)
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
-    
 

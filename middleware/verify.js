@@ -1,5 +1,4 @@
 const userModel = require('../models/userModel')
-const blackListModel = require('../models/blackListModel')
 const jwt = require('jsonwebtoken')
 const { ACCESS_TOKEN } = require('../configuration/config')
 
@@ -11,10 +10,6 @@ const verify = async(request, response, next) => {
 
         const cookie = authHeader.split('=')[1]
         const accessToken = cookie.split(';')[0]
-        const checkIfBlacklisted = await blackListModel.findOne({ token: accessToken })
-        
-        if (checkIfBlacklisted)
-            return response.status(401).json({ code:401, message: 'Session expired' })
 
         jwt.verify(cookie, ACCESS_TOKEN, async(error, decoded) => {
             if (error)
